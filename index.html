@@ -332,5 +332,19 @@ Anak cerdas, anak sholehah dan anak kesayangannya bapak ibu dan semua orang Semo
       }
     }
   </script>
+  <!-- Audio Musik Latar (Pastikan nama file mp3-nya sesuai dan tanpa spasi) -->
+<audio id="bg-music" loop>
+  <source src="annisakarina.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  // Begitu layar di-klik atau disentuh di mana saja untuk pertama kali, musik langsung main otomatis
+  window.addEventListener('click', function() {
+    var music = document.getElementById('bg-music');
+    if (music.paused) {
+      music.play();
+    }
+  }, { once: true }); // { once: true } artinya perintah ini cukup aktif sekali klik pertama saja
+</script>
 </body>
 </html>
