@@ -232,7 +232,6 @@
 
     <!-- STAGE 3: UCAPAN ULANG TAHUN -->
     <div id="stage3" class="hidden">
-      <!-- Ganti link gambar di bawah dengan foto temanmu -->
       <img src="annisakarina.jpeg" alt="Profile" class="profile-img" />
       <h2>Happy Birthday yaw! 🥳</h2>
       
@@ -332,19 +331,19 @@ Anak cerdas, anak sholehah dan anak kesayangannya bapak ibu dan semua orang Semo
       }
     }
   </script>
-  <!-- Audio Musik Latar (Pastikan nama file mp3-nya sesuai dan tanpa spasi) -->
-<audio id="bg-music" loop>
-  <source src="annisakarina.mp3" type="audio/mpeg">
-</audio>
 
-<script>
-  // Begitu layar di-klik atau disentuh di mana saja untuk pertama kali, musik langsung main otomatis
-  window.addEventListener('click', function() {
-    var music = document.getElementById('bg-music');
-    if (music.paused) {
-      music.play();
-    }
-  }, { once: true }); // { once: true } artinya perintah ini cukup aktif sekali klik pertama saja
-</script>
+  <!-- Audio Musik Latar -->
+  <audio id="bg-music" loop>
+    <source src="annisakarina.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    window.addEventListener('click', function() {
+      var music = document.getElementById('bg-music');
+      if (music.paused) {
+        music.play();
+      }
+    }, { once: true });
+  </script>
 </body>
 </html>
