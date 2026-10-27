@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday! 🎁</title>
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #181925 0%, #292a40 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      padding: 20px;
+    }
+
+    .card-container {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 24px;
+      padding: 28px 24px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      text-align: center;
+      position: relative;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    p.subtext {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      margin-bottom: 20px;
+    }
+
+    /* STAGE 1: Memory Game Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      height: 75px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.3s ease, background 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card.flipped {
+      background: rgba(255, 255, 255, 0.28);
+      transform: rotateY(180deg);
+    }
+
+    .card.matched {
+      background: rgba(74, 222, 128, 0.25);
+      border: 1px solid rgba(74, 222, 128, 0.5);
+      cursor: default;
+    }
+
+    /* STAGE 2: Cake & Candle */
+    .cake-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 25px 0;
+    }
+
+    .cake {
+      width: 180px;
+      height: 110px;
+      background: #f472b6;
+      border-radius: 16px 16px 8px 8px;
+      position: relative;
+      margin-top: 40px;
+      box-shadow: 0 8px 0 #db2777;
+    }
+
+    .cake::before {
+      content: '';
+      position: absolute;
+      top: 35px;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      background: #fbcfe8;
+    }
+
+    .candle {
+      width: 18px;
+      height: 45px;
+      background: #fef08a;
+      position: absolute;
+      top: -45px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 4px;
+    }
+
+    .flame {
+      width: 16px;
+      height: 24px;
+      background: #f97316;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      position: absolute;
+      top: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 15px #f97316, 0 0 25px #facc15;
+      animation: flicker 0.6s infinite alternate;
+    }
+
+    .flame.off {
+      display: none;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1); }
+      100% { transform: translateX(-50%) scale(1.15); }
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #ef4444 0%, #ec4899 100%);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 15px;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    /* STAGE 3: Profile & Wishes */
+    .profile-img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #f472b6;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(244, 114, 182, 0.3);
+    }
+
+    .message-box {
+      text-align: center;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      white-space: pre-line;
+      margin-top: 15px;
+      min-height: 100px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 15px;
+      background-color: #f472b6;
+      animation: blink 0.7s infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card-container">
+
+    <!-- STAGE 1: GAME -->
+    <div id="stage1">
+      <h2>A Little Game for You 🎁</h2>
+      <p class="subtext">Balik 2 Kartu yang Sama!</p>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <!-- STAGE 2: MAKE A WISH -->
+    <div id="stage2" class="hidden">
+      <h2>Make a Wish 🥳</h2>
+      <p class="subtext">Tutup matamu, buat permintaan, lalu tiup lilinnya yaw!</p>
+      
+      <div class="cake-container">
+        <div class="cake">
+          <div class="candle">
+            <div class="flame" id="flame"></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn" onclick="blowCandle()">Tiup Lilin 🌬️</button>
+    </div>
+
+    <!-- STAGE 3: UCAPAN ULANG TAHUN -->
+    <div id="stage3" class="hidden">
+      <!-- Ganti link gambar di bawah dengan foto temanmu -->
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" alt="Profile" class="profile-img" />
+      <h2>Happy Birthday yaw! 🥳</h2>
+      
+      <div class="message-box">
+        <span id="typed-text"></span><span class="cursor"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- STAGE 1: MEMORY GAME SETUP ---
+    const icons = ['🌺', '🎁', '🎉', '💖', '🥳', '💘'];
+    let deck = [...icons, ...icons].sort(() => 0.5 - Math.random());
+    const grid = document.getElementById('grid');
+    let flippedCards = [];
+    let matchedPairs = 0;
+
+    deck.forEach((icon, index) => {
+      const card = document.createElement('div');
+      card.classList.add('card');
+      card.dataset.icon = icon;
+      card.dataset.index = index;
+      card.innerText = '❓';
+      card.addEventListener('click', flipCard);
+      grid.appendChild(card);
+    });
+
+    function flipCard() {
+      if (flippedCards.length < 2 && !this.classList.contains('flipped') && !this.classList.contains('matched')) {
+        this.classList.add('flipped');
+        this.innerText = this.dataset.icon;
+        flippedCards.push(this);
+
+        if (flippedCards.length === 2) {
+          checkMatch();
+        }
+      }
+    }
+
+    function checkMatch() {
+      const [card1, card2] = flippedCards;
+      if (card1.dataset.icon === card2.dataset.icon) {
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        flippedCards = [];
+        matchedPairs++;
+
+        if (matchedPairs === icons.length) {
+          setTimeout(() => {
+            document.getElementById('stage1').classList.add('hidden');
+            document.getElementById('stage2').classList.remove('hidden');
+          }, 800);
+        }
+      } else {
+        setTimeout(() => {
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
+          card1.innerText = '❓';
+          card2.innerText = '❓';
+          flippedCards = [];
+        }, 700);
+      }
+    }
+
+    // --- STAGE 2: CANDLE BLOW ---
+    function blowCandle() {
+      const flame = document.getElementById('flame');
+      flame.classList.add('off');
+
+      // Efek Konfeti
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        document.getElementById('stage2').classList.add('hidden');
+        document.getElementById('stage3').classList.remove('hidden');
+        startTyping();
+      }, 1500);
+    }
+
+    // --- STAGE 3: TYPING EFFECT (PESAN SINGKAT) ---
+    const textToType = `Selamat ulang tahun anak cantik! 🌸
+
+Semoga Allah paring kelancaran kuliahnya dan semoga semua tujuannya tercapai yaa. Aamiin 🤲✨`;
+
+    let charIndex = 0;
+    function startTyping() {
+      const typedTextElement = document.getElementById('typed-text');
+      if (charIndex < textToType.length) {
+        typedTextElement.innerText += textToType.charAt(charIndex);
+        charIndex++;
+        setTimeout(startTyping, 45);
+      }
+    }
+  </script>
+</body>
+</html>
